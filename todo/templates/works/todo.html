@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ todo.title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'works/css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="myContainer">
+    <div class="box" style="padding: 30px">
+    <form method="post">
+        {% csrf_token %}
+    <div class="inputContainer">
+        <input type="text" id="description" class="taskName"
+            name="description" value="{{ todo.title }}" required>
+        <label for="description">Description</label>
+    </div>
+    <div class="inputContainer half last">
+        <i class="fa fa-caret-down selectArrow"></i>
+        <select id="category" class="taskCategory" name="category_select" required>
+            <option class="disabled">Choose a category</option>
+            {% for category in categories %}
+            {% if category.name == todo.category %}
+            <option class="" value="{{ category.name }}" name="{{ category.name }}" selected>{{ category.name }}</option>
+            {% else %}
+            <option class="" value="{{ category.name }}" name="{{ category.name }}">{{ category.name }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        <label for="category">Category</label>
+    </div>
+    <div class="inputContainer half last right">
+        <input type="date" id="dueDate" class="taskDate" name="date" value="{{ todo.due_date }}" required>
+        <label for="dueDate">Due Date</label>
+    </div>
+    <button type="submit" style="background-color: cornflowerblue; width: 100px; margin: auto; display: block; font-size: 20pt;">Edit</button>
+    </form>
+</div> 
+    </div>
+</body>
+</html>
