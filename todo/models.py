@@ -1,7 +1,7 @@
 from uuid import uuid4
 from django.db import models
 from django.utils import timezone
-
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -23,7 +23,7 @@ class TodoList(models.Model):
     category = models.ForeignKey(
         "Category", on_delete=models.CASCADE, default="generel"
     )
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE,)
     class Meta:
         ordering = ["-created"]
 
