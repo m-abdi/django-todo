@@ -35,7 +35,7 @@ def sign_up(request):
 def sign_in(request):
     # sign-in form
     if request.method == "GET":
-        return render(request, "users/signIn.html")
+        return render(request, "users/signIn.html", status=200)
     # login user
     elif request.method == "POST":
         if "username" in request.POST and "pass" in request.POST:
