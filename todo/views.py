@@ -3,13 +3,13 @@ import re
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-
+from django.views import View
 from .models import Category, TodoList
+from django.utils.decorators import method_decorator
 
-
-@login_required(login_url="/users/signIn/")
-def main(request):
-    if request.method == "POST":
+@method_decorator(login_required(login_url="/users/signIn/"), name="dispatch")
+class main(View):
+    def post(self, request):
         if "taskAdd" in request.POST:
             title = request.POST["description"]
             date = str(request.POST["date"])
@@ -20,7 +20,7 @@ def main(request):
                 content=content,
                 due_date=date,
                 category=Category.objects.get(name=category),
-                user=request.user
+                user=request.user,
             )
             Todo.save()
             return redirect("/")
@@ -36,7 +36,8 @@ def main(request):
             return redirect("/")
         else:
             return HttpResponse("Check Parameters", status=400)
-    elif request.method == "GET":
+
+    def get(self, request):
 
         categories = Category.objects.all()
         todos = TodoList.objects.filter(user=request.user)
@@ -45,9 +46,9 @@ def main(request):
         )
 
 
-@login_required(login_url="/users/signIn/")
-def edit_todo(request, todo_id):
-    if request.method == "GET":
+@method_decorator(login_required(login_url="/users/signIn/"), name="dispatch")
+class edit_todo(View):
+    def get(self, request, todo_id):
         todo = TodoList.objects.get(id=todo_id, user=request.user)
         categories = Category.objects.all()
         todo.due_date = todo.due_date.strftime("%Y-%m-%d")
@@ -55,7 +56,7 @@ def edit_todo(request, todo_id):
             request, "works/todo.html", {"todo": todo, "categories": categories}
         )
 
-    elif request.method == "POST":
+    def post(self, request):
         title = request.POST["description"]
         date = str(request.POST["date"])
         category = request.POST["category_select"]
