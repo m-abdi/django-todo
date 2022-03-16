@@ -56,7 +56,7 @@ class edit_todo(View):
             request, "works/todo.html", {"todo": todo, "categories": categories}
         )
 
-    def post(self, request):
+    def post(self, request, todo_id):
         title = request.POST["description"]
         date = str(request.POST["date"])
         category = request.POST["category_select"]
